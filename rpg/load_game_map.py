@@ -179,13 +179,13 @@ def load_maps():
     (Must use the .json extension.)
     """
 
-    # Directory to pull maps from
-    mypath = "resources/maps"
-
     if load_maps.map_file_names is None:
 
         # Dictionary to hold all our maps
         load_maps.map_list = {}
+
+        # Directory to pull maps from
+        mypath = "resources/maps"
 
         # Pull names of all json files in that path
         load_maps.map_file_names = [

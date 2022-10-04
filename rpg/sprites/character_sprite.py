@@ -49,17 +49,9 @@ class CharacterSprite(arcade.Sprite):
         direction = Direction.LEFT
         slope = self.change_y / (self.change_x + 0.0001)
         if abs(slope) < 0.8:
-            if self.change_x > 0:
-                direction = Direction.RIGHT
-            else:
-                # technically not necessary, but for readability
-                direction = Direction.LEFT
+            direction = Direction.RIGHT if self.change_x > 0 else Direction.LEFT
         else:
-            if self.change_y > 0:
-                direction = Direction.UP
-            else:
-                direction = Direction.DOWN
-
+            direction = Direction.UP if self.change_y > 0 else Direction.DOWN
         if self.cur_texture_index not in SPRITE_INFO[direction]:
             self.cur_texture_index = SPRITE_INFO[direction][0]
 

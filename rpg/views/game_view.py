@@ -90,10 +90,11 @@ class DebugMenu(arcade.gui.UIBorder, arcade.gui.UIWindowLikeMixin):
 
         def toggle(*args):
             # toggle state on click
-            self.noclip_status = True if not self.noclip_status else False
+            self.noclip_status = not self.noclip_status
             self.noclip_button._style = (
-                self.off_style if not self.noclip_status else self.on_style
+                self.on_style if self.noclip_status else self.off_style
             )
+
             self.noclip_button.clear()
 
             callback(status=self.noclip_status)
@@ -109,10 +110,11 @@ class DebugMenu(arcade.gui.UIBorder, arcade.gui.UIWindowLikeMixin):
 
         def toggle(*args):
             # toggle state on click
-            self.hyper_status = True if not self.hyper_status else False
+            self.hyper_status = not self.hyper_status
             self.hyper_button._style = (
-                self.off_style if not self.hyper_status else self.on_style
+                self.on_style if self.hyper_status else self.off_style
             )
+
             self.hyper_button.clear()
 
             callback(status=self.hyper_status)
@@ -306,8 +308,8 @@ class GameView(arcade.View):
         arcade.draw_rectangle_filled(
             x, y, self.window.width, hotbar_height, arcade.color.ALMOND
         )
+        y = vertical_hotbar_location
         for i in range(capacity):
-            y = vertical_hotbar_location
             x = i * field_width + 5
             if i == self.selected_item - 1:
                 arcade.draw_lrtb_rectangle_outline(
@@ -588,7 +590,7 @@ class GameView(arcade.View):
                 cur_map.light_layer.add(self.player_light)
         elif key == arcade.key.GRAVE:  # `
             # toggle debug
-            self.debug = True if not self.debug else False
+            self.debug = not self.debug
             if self.debug:
                 self.enable_debug_menu()
             else:
