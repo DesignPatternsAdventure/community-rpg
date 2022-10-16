@@ -13,6 +13,7 @@ from rpg.constants import TILE_SCALING
 from rpg.sprites.path_following_sprite import PathFollowingSprite
 from rpg.sprites.random_walking_sprite import RandomWalkingSprite
 
+GOD_MODE = False
 
 class GameMap:
     name = None
@@ -126,7 +127,7 @@ def load_map(map_name):
     # Any layer with '_blocking' in it, will be a wall
     game_map.scene.add_sprite_list("wall_list", use_spatial_hash=True)
     for layer, sprite_list in game_map.map_layers.items():
-        if "_blocking" in layer:
+        if "_blocking" in layer and not GOD_MODE:
             try:
               game_map.scene.remove_sprite_list_by_object(sprite_list)
             except:
