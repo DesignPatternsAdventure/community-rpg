@@ -14,3 +14,9 @@ exclude = '''
   | dist
 )/'''
 
+[tool.poetry]
+name = "design_patterns_island"
+version = "0.0.1"
+description = "Learn Design Patterns while Extending an RPG game"
+license = "MIT"
+authors = ["Kyle King <kyleking@gatech.edu>", "Jessie Zhang <szhang755@gatech.edu>"]

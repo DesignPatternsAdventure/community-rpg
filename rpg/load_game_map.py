@@ -166,7 +166,10 @@ def load_map(map_name):
     game_map.scene.add_sprite_list("wall_list", use_spatial_hash=True)
     for layer, sprite_list in game_map.map_layers.items():
         if "_blocking" in layer:
-            game_map.scene.remove_sprite_list_by_object(sprite_list)
+            try:
+              game_map.scene.remove_sprite_list_by_object(sprite_list)
+            except:
+              print(f'{layer} has no objects')
 
             game_map.scene["wall_list"].extend(sprite_list)
 
