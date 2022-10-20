@@ -12,6 +12,7 @@ import rpg.constants as constants
 from pyglet.math import Vec2
 from rpg.message_box import MessageBox
 from rpg.sprites.player_sprite import PlayerSprite
+from rpg.sprites.item_sprite import ItemSprite
 
 
 class GameView(arcade.View):
@@ -30,6 +31,9 @@ class GameView(arcade.View):
         # Player sprite
         self.player_sprite = None
         self.player_sprite_list = None
+
+        # Item that player is holding
+        self.item_sprite = None
 
         # Track the current state of what key is pressed
         self.left_pressed = False
@@ -88,9 +92,13 @@ class GameView(arcade.View):
         self.player_sprite.center_y = (
             map_height - start_y
         ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
+        self.item_sprite.center_x = self.player_sprite.center_x
+        self.item_sprite.center_y = self.player_sprite.center_y
+
         self.scroll_to_player(1.0)
         self.player_sprite_list = arcade.SpriteList()
         self.player_sprite_list.append(self.player_sprite)
+        self.player_sprite_list.append(self.item_sprite)
 
         self.setup_physics()
 
@@ -110,7 +118,8 @@ class GameView(arcade.View):
         """Set up the game variables. Call to re-start the game."""
 
         # Create the player character
-        self.player_sprite = PlayerSprite(":characters:Female/Female 18-4.png")
+        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
+        self.item_sprite = ItemSprite('pickaxe', self.player_sprite)
 
         # Spawn the player
         start_x = constants.STARTING_X
