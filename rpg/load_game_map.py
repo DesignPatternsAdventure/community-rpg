@@ -16,7 +16,6 @@ from rpg.sprites.random_walking_sprite import RandomWalkingSprite
 GOD_MODE = False
 LOAD_ALL_MAPS = False
 
-
 class GameMap:
     name = None
     scene = None

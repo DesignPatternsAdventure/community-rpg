@@ -32,9 +32,6 @@ class GameView(arcade.View):
         self.player_sprite = None
         self.player_sprite_list = None
 
-        # Item that player is holding
-        self.item_sprite = None
-
         # Track the current state of what key is pressed
         self.left_pressed = False
         self.right_pressed = False
@@ -92,7 +89,6 @@ class GameView(arcade.View):
         self.player_sprite.center_y = (
             map_height - start_y
         ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
-
         self.scroll_to_player(1.0)
         self.player_sprite_list = arcade.SpriteList()
         self.player_sprite_list.append(self.player_sprite)
@@ -205,6 +201,7 @@ class GameView(arcade.View):
 
         # Draw the player
         self.player_sprite_list.draw()
+
         if self.player_sprite.item:
             self.player_sprite.item.draw()
 
@@ -375,7 +372,7 @@ class GameView(arcade.View):
             self.search()
         elif key == arcade.key.KEY_1:
             self.selected_item = 1
-            self.player_sprite.equip(0)
+            self.player_sprite.equip(0) # Will add this to the other keys once there are more items
         elif key == arcade.key.KEY_2:
             self.selected_item = 2
         elif key == arcade.key.KEY_3:

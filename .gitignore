@@ -79,3 +79,4 @@ venv.bak/
 *.wpu
 /.vscode/
 .idea/
+*.DS_Store
