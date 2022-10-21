@@ -5,6 +5,7 @@ Main game view
 import json
 from functools import partial
 from typing import Callable
+import datetime
 
 import arcade
 import arcade.gui
@@ -442,9 +443,10 @@ class GameView(arcade.View):
         )
         print(f"Found {len(sprites_in_range)} searchable sprite(s) in range.")
         for sprite in sprites_in_range:
+
             if "item" in sprite.properties:
                 self.message_box = MessageBox(
-                    self, f"Found: {sprite.properties['item']}"
+                    self, f"{sprite.properties['item']} added to inventory"
                 )
                 sprite.remove_from_sprite_lists()
                 lookup_item = self.item_dictionary[sprite.properties["item"]]
@@ -472,6 +474,8 @@ class GameView(arcade.View):
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         """Called when the user presses a mouse button."""
+        if self.message_box:
+          self.close_message_box()
         if button == arcade.MOUSE_BUTTON_RIGHT:
             self.player_sprite.destination_point = x, y
 

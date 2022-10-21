@@ -33,8 +33,8 @@ INVENTORY = [arcade.key.I]
 SEARCH = [arcade.key.E]
 
 # Message box
-MESSAGE_BOX_FONT_SIZE = 38
-MESSAGE_BOX_MARGIN = 30
+MESSAGE_BOX_FONT_SIZE = 18
+MESSAGE_BOX_MARGIN = 5
 
 # How fast does the camera pan to the user
 CAMERA_SPEED = 0.1

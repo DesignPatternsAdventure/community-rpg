@@ -12,7 +12,7 @@ class MessageBox:
 
     def on_draw(self):
         cx = self.view.window.width / 2
-        cy = self.view.window.height / 2
+        cy = self.view.window.height - self.view.window.height / 8
 
         arcade.draw_rectangle_filled(
             cx,
@@ -29,7 +29,6 @@ class MessageBox:
             arcade.color.ALLOY_ORANGE,
             4,
         )
-
         arcade.draw_text(
             self.message,
             cx,

@@ -2,7 +2,7 @@ import arcade
 from rpg.constants import ITEM_MAP
 from rpg.sprites.character_sprite import Direction
 
-ITEM_SPRITE_SHEET = ":misc:items.png"
+ITEM_SPRITE_SHEET = ":items:items.png"
 ITEM_SPRITE_SIZE = 16
 
 
