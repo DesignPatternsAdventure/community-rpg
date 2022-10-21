@@ -13,7 +13,6 @@ import rpg.constants as constants
 from pyglet.math import Vec2
 from rpg.message_box import MessageBox
 from rpg.sprites.player_sprite import PlayerSprite
-from rpg.sprites.item_sprite import ItemSprite
 
 
 class GameView(arcade.View):
@@ -55,7 +54,7 @@ class GameView(arcade.View):
 
         # Selected Items Hotbar
         self.hotbar_sprite_list = None
-        self.selected_item = 1
+        self.selected_item = None
 
         f = open("resources/data/item_dictionary.json")
         self.item_dictionary = json.load(f)
@@ -93,13 +92,10 @@ class GameView(arcade.View):
         self.player_sprite.center_y = (
             map_height - start_y
         ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
-        self.item_sprite.center_x = self.player_sprite.center_x
-        self.item_sprite.center_y = self.player_sprite.center_y
 
         self.scroll_to_player(1.0)
         self.player_sprite_list = arcade.SpriteList()
         self.player_sprite_list.append(self.player_sprite)
-        self.player_sprite_list.append(self.item_sprite)
 
         self.setup_physics()
 
@@ -120,7 +116,6 @@ class GameView(arcade.View):
 
         # Create the player character
         self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
-        self.item_sprite = ItemSprite('pickaxe', self.player_sprite)
 
         # Spawn the player
         start_x = constants.STARTING_X
@@ -173,13 +168,13 @@ class GameView(arcade.View):
         for i in range(capacity):
             y = vertical_hotbar_location
             x = i * field_width + 5
-            if i == self.selected_item - 1:
+            if self.selected_item and i == self.selected_item - 1:
                 arcade.draw_lrtb_rectangle_outline(
                     x - 6, x + field_width - 15, y + 25, y - 10, arcade.color.BLACK, 2
                 )
 
             if len(self.player_sprite.inventory) > i:
-                item_name = self.player_sprite.inventory[i]["short_name"]
+                item_name = self.player_sprite.inventory[i].properties['item']
             else:
                 item_name = ""
 
@@ -210,6 +205,8 @@ class GameView(arcade.View):
 
         # Draw the player
         self.player_sprite_list.draw()
+        if self.player_sprite.item:
+            self.player_sprite.item.draw()
 
         for item in map_layers.get("searchable", []):
             arcade.Sprite(
@@ -353,42 +350,14 @@ class GameView(arcade.View):
             # no characters on map
             pass
 
-        # --- Manage doors ---
-        map_layers = self.map_list[self.cur_map_name].map_layers
-
-        # Is there as layer named 'doors'?
-        if "doors" in map_layers:
-            # Did we hit a door?
-            doors_hit = arcade.check_for_collision_with_list(
-                self.player_sprite, map_layers["doors"]
-            )
-            # We did!
-            if len(doors_hit) > 0:
-                try:
-                    # Grab the info we need
-                    map_name = doors_hit[0].properties["map_name"]
-                    start_x = doors_hit[0].properties["start_x"]
-                    start_y = doors_hit[0].properties["start_y"]
-                except KeyError:
-                    raise KeyError(
-                        "Door objects must have 'map_name', 'start_x', and 'start_y' properties defined."
-                    )
-
-                # Swap to the new map
-                self.switch_map(map_name, start_x, start_y)
-            else:
-                # We didn't hit a door, scroll normally
-                self.scroll_to_player()
-        else:
-            # No doors, scroll normally
-            self.scroll_to_player()
-
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
         if self.message_box:
             self.message_box.on_key_press(key, modifiers)
             return
+
+        self.selected_item = None
 
         if key in constants.KEY_UP:
             self.up_pressed = True
@@ -406,6 +375,7 @@ class GameView(arcade.View):
             self.search()
         elif key == arcade.key.KEY_1:
             self.selected_item = 1
+            self.player_sprite.equip(0)
         elif key == arcade.key.KEY_2:
             self.selected_item = 2
         elif key == arcade.key.KEY_3:
@@ -445,12 +415,13 @@ class GameView(arcade.View):
         for sprite in sprites_in_range:
 
             if "item" in sprite.properties:
+                self.player_sprite.inventory.append(sprite)
                 self.message_box = MessageBox(
-                    self, f"{sprite.properties['item']} added to inventory"
+                    self,
+                    f"{sprite.properties['item']} added to inventory!",
+                    f"Press {str(len(self.player_sprite.inventory))} to equip item. Press any key to close this message."
                 )
                 sprite.remove_from_sprite_lists()
-                lookup_item = self.item_dictionary[sprite.properties["item"]]
-                self.player_sprite.inventory.append(lookup_item)
             else:
                 print(
                     "The 'item' property was not set for the sprite. Can't get any items from this."
@@ -475,7 +446,7 @@ class GameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         """Called when the user presses a mouse button."""
         if self.message_box:
-          self.close_message_box()
+            self.close_message_box()
         if button == arcade.MOUSE_BUTTON_RIGHT:
             self.player_sprite.destination_point = x, y
 

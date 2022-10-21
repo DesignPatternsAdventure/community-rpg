@@ -34,7 +34,7 @@ SEARCH = [arcade.key.E]
 
 # Message box
 MESSAGE_BOX_FONT_SIZE = 18
-MESSAGE_BOX_MARGIN = 5
+MESSAGE_BOX_MARGIN = 10
 
 # How fast does the camera pan to the user
 CAMERA_SPEED = 0.1
