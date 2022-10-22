@@ -20,7 +20,7 @@ class GameView(arcade.View):
     Main application class.
     """
 
-    def __init__(self, map_list):
+    def __init__(self, map):
         super().__init__()
 
         arcade.set_background_color(arcade.color.AMAZON)
@@ -42,10 +42,7 @@ class GameView(arcade.View):
         self.physics_engine = None
 
         # Maps
-        self.map_list = map_list
-
-        # Name of map we are on
-        self.cur_map_name = None
+        self.map = map
 
         self.message_box = None
 
@@ -65,36 +62,6 @@ class GameView(arcade.View):
 
         self.noclip_status = False
 
-    def switch_map(self, map_name, start_x, start_y):
-        """
-        Switch the current map
-        :param map_name: Name of map to switch to
-        :param start_x: Grid x location to spawn at
-        :param start_y: Grid y location to spawn at
-        """
-        self.cur_map_name = map_name
-
-        try:
-            self.my_map = self.map_list[self.cur_map_name]
-        except KeyError:
-            raise KeyError(f"Unable to find map named '{map_name}'.")
-
-        if self.my_map.background_color:
-            arcade.set_background_color(self.my_map.background_color)
-
-        map_height = self.my_map.map_size[1]
-        self.player_sprite.center_x = (
-            start_x * constants.SPRITE_SIZE + constants.SPRITE_SIZE / 2
-        )
-        self.player_sprite.center_y = (
-            map_height - start_y
-        ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
-        self.scroll_to_player(1.0)
-        self.player_sprite_list = arcade.SpriteList()
-        self.player_sprite_list.append(self.player_sprite)
-
-        self.setup_physics()
-
     def setup_physics(self):
         if self.noclip_status:
             # make an empty spritelist so the character does not collide with anyting
@@ -104,23 +71,33 @@ class GameView(arcade.View):
         else:
             # use the walls as normal
             self.physics_engine = arcade.PhysicsEngineSimple(
-                self.player_sprite, self.my_map.scene["wall_list"]
+                self.player_sprite, self.map.scene["wall_list"]
             )
 
     def setup(self):
         """Set up the game variables. Call to re-start the game."""
 
-        # Create the player character
-        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
+        if self.map.background_color:
+            arcade.set_background_color(self.map.background_color)
+
+        map_height = self.map.map_size[1]
 
         # Spawn the player
-        start_x = constants.STARTING_X
-        start_y = constants.STARTING_Y
-        self.switch_map(constants.STARTING_MAP, start_x, start_y)
-        self.cur_map_name = constants.STARTING_MAP
+        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
+        self.player_sprite.center_x = (
+            constants.STARTING_X * constants.SPRITE_SIZE + constants.SPRITE_SIZE / 2
+        )
+        self.player_sprite.center_y = (
+            map_height - constants.STARTING_Y
+        ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
+        self.scroll_to_player(1.0)
+        self.player_sprite_list = arcade.SpriteList()
+        self.player_sprite_list.append(self.player_sprite)
 
         # Set up the hotbar
         self.load_hotbar_sprites()
+
+        self.setup_physics()
 
     def load_hotbar_sprites(self):
         """Load the sprites for the hotbar at the bottom of the screen.
@@ -188,16 +165,15 @@ class GameView(arcade.View):
         # This command should happen before we start drawing. It will clear
         # the screen to the background color, and erase what we drew last frame.
         arcade.start_render()
-        cur_map = self.map_list[self.cur_map_name]
 
         # Use the scrolling camera for sprites
         self.camera_sprites.use()
 
         # Grab each tile layer from the map
-        map_layers = cur_map.map_layers
+        map_layers = self.map.map_layers
 
         # Draw scene
-        cur_map.scene.draw()
+        self.map.scene.draw()
 
         # Draw the player
         self.player_sprite_list.draw()
@@ -237,9 +213,8 @@ class GameView(arcade.View):
 
     def on_show_view(self):
         # Set background color
-        my_map = self.map_list[self.cur_map_name]
-        if my_map.background_color:
-            arcade.set_background_color(my_map.background_color)
+        if self.map.background_color:
+            arcade.set_background_color(self.map.background_color)
 
     def on_update(self, delta_time):
         """
@@ -342,7 +317,7 @@ class GameView(arcade.View):
 
         # Update the characters
         try:
-            self.map_list[self.cur_map_name].scene["characters"].on_update(delta_time)
+            self.map.scene["characters"].on_update(delta_time)
         except KeyError:
             # no characters on map
             pass
@@ -372,7 +347,8 @@ class GameView(arcade.View):
             self.search()
         elif key == arcade.key.KEY_1:
             self.selected_item = 1
-            self.player_sprite.equip(0) # Will add this to the other keys once there are more items
+            # Will add this to the other keys once there are more items
+            self.player_sprite.equip(0)
         elif key == arcade.key.KEY_2:
             self.selected_item = 2
         elif key == arcade.key.KEY_3:
@@ -397,7 +373,7 @@ class GameView(arcade.View):
 
     def search(self):
         """Search for things"""
-        map_layers = self.map_list[self.cur_map_name].map_layers
+        map_layers = self.map.map_layers
         if "searchable" not in map_layers:
             self.message_box = MessageBox(
                 self, "No searchable items nearby"
@@ -458,4 +434,3 @@ class GameView(arcade.View):
         """
         self.camera_sprites.resize(width, height)
         self.camera_gui.resize(width, height)
-        cur_map = self.map_list[self.cur_map_name]

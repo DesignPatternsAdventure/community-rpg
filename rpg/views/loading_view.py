@@ -3,7 +3,7 @@ Loading screen
 """
 import arcade
 from rpg.draw_bar import draw_bar
-from rpg.load_game_map import load_maps
+from rpg.load_game_map import load_map
 from rpg.views.game_view import GameView
 from rpg.views.inventory_view import InventoryView
 from rpg.views.main_menu_view import MainMenuView
@@ -14,8 +14,7 @@ class LoadingView(arcade.View):
     def __init__(self):
         super().__init__()
         self.started = False
-        self.progress = 0
-        self.map_list = None
+        self.game_map = None
         arcade.set_background_color(arcade.color.ALMOND)
 
     def on_draw(self):
@@ -32,31 +31,19 @@ class LoadingView(arcade.View):
             width=self.window.width,
         )
         self.started = True
-        draw_bar(
-            current_amount=self.progress,
-            max_amount=100,
-            center_x=self.window.width / 2,
-            center_y=20,
-            width=self.window.width,
-            height=10,
-            color_a=arcade.color.BLACK,
-            color_b=arcade.color.WHITE,
-        )
 
     def setup(self):
         pass
 
     def on_update(self, delta_time: float):
-        # Dictionary to hold all our maps
         if self.started:
-            done, self.progress, self.map_list = load_maps()
-            if done:
-                self.window.views["game"] = GameView(self.map_list)
-                self.window.views["game"].setup()
-                self.window.views["inventory"] = InventoryView()
-                self.window.views["inventory"].setup()
-                self.window.views["main_menu"] = MainMenuView()
-                self.window.views["settings"] = SettingsView()
-                self.window.views["settings"].setup()
+            self.game_map = load_map()
+            self.window.views["game"] = GameView(self.game_map)
+            self.window.views["game"].setup()
+            self.window.views["inventory"] = InventoryView()
+            self.window.views["inventory"].setup()
+            self.window.views["main_menu"] = MainMenuView()
+            self.window.views["settings"] = SettingsView()
+            self.window.views["settings"].setup()
 
-                self.window.show_view(self.window.views["game"])
+            self.window.show_view(self.window.views["game"])

@@ -20,7 +20,7 @@ BOTTOM_VIEWPORT_MARGIN = 300
 TOP_VIEWPORT_MARGIN = 300
 
 # What map, and what position we start at
-STARTING_MAP = "main_map_new"
+MAP = "resources/maps/main_map_new.json"
 STARTING_X = 110
 STARTING_Y = 105
 
