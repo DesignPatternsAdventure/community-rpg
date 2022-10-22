@@ -3,9 +3,7 @@ Main game view
 """
 
 import json
-from functools import partial
-from typing import Callable
-import datetime
+import math
 
 import arcade
 import arcade.gui
@@ -61,6 +59,7 @@ class GameView(arcade.View):
         self.camera_gui = arcade.Camera(self.window.width, self.window.height)
 
         self.noclip_status = False
+        self.animate = False
 
     def setup_physics(self):
         if self.noclip_status:
@@ -315,6 +314,9 @@ class GameView(arcade.View):
         # Update player animation
         self.player_sprite_list.on_update(delta_time)
 
+        if self.animate and self.player_sprite.item:
+            self.animate_player_item()
+
         # Update the characters
         try:
             self.map.scene["characters"].on_update(delta_time)
@@ -422,6 +424,14 @@ class GameView(arcade.View):
             self.close_message_box()
         if button == arcade.MOUSE_BUTTON_RIGHT:
             self.player_sprite.destination_point = x, y
+        if button == arcade.MOUSE_BUTTON_LEFT and self.player_sprite.item:
+            closest = arcade.get_closest_sprite(
+                self.player_sprite, self.map.map_layers["interactables_blocking"])
+            if closest:
+              (sprite, dist) = closest
+              if dist < constants.SPRITE_SIZE * 2:
+                  self.player_sprite.item_target = sprite
+                  self.animate = True
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """Called when a user releases a mouse button."""
@@ -434,3 +444,7 @@ class GameView(arcade.View):
         """
         self.camera_sprites.resize(width, height)
         self.camera_gui.resize(width, height)
+
+    def animate_player_item(self):
+        config = self.item_dictionary[self.player_sprite.item.properties['item']]['animation']
+        self.animate = self.player_sprite.animate_item(config)
