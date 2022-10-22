@@ -42,7 +42,7 @@ If you already have a compatible version of Python and poetry installed, you can
 
 The recommended installation is with `asdf` on Linux, Mac, and Windows (through WSL). For Windows native, see the recommended solutions further below
 
-### Mac, Linux, and Windows-Subsystem-for-Llinux (WSL)
+### Mac, Linux, and Windows Subsystem for Linux (WSL)
 
 `asdf` is a general purpose version manager and we use it to ensure consistency between setups. To install `asdf`, follow the [installation guide](https://asdf-vm.com/guide/getting-started.html)
 
