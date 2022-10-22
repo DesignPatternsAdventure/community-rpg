@@ -20,7 +20,7 @@ BOTTOM_VIEWPORT_MARGIN = 300
 TOP_VIEWPORT_MARGIN = 300
 
 # What map, and what position we start at
-STARTING_MAP = "main_map_new"
+MAP = "resources/maps/main_map_new.json"
 STARTING_X = 110
 STARTING_Y = 105
 
@@ -33,8 +33,12 @@ INVENTORY = [arcade.key.I]
 SEARCH = [arcade.key.E]
 
 # Message box
-MESSAGE_BOX_FONT_SIZE = 38
-MESSAGE_BOX_MARGIN = 30
+MESSAGE_BOX_FONT_SIZE = 18
+MESSAGE_BOX_MARGIN = 10
 
 # How fast does the camera pan to the user
 CAMERA_SPEED = 0.1
+
+ITEM_MAP = {
+  'pickaxe': 43
+}

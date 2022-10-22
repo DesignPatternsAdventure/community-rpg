@@ -9,7 +9,7 @@ from os.path import isfile, join
 import arcade
 
 from rpg.sprites.character_sprite import CharacterSprite
-from rpg.constants import TILE_SCALING
+from rpg.constants import MAP, TILE_SCALING
 from rpg.sprites.path_following_sprite import PathFollowingSprite
 from rpg.sprites.random_walking_sprite import RandomWalkingSprite
 
@@ -24,7 +24,7 @@ class GameMap:
     background_color = arcade.color.AMAZON
 
 
-def load_map(map_name):
+def load_map():
     """
     Load a map
     """
@@ -50,9 +50,9 @@ def load_map(map_name):
     }
 
     # Read in the tiled map
-    print(f"Loading map: {map_name}")
+    print(f"Loading map: {MAP}")
     my_map = arcade.tilemap.load_tilemap(
-        map_name, scaling=TILE_SCALING, layer_options=layer_options
+        MAP, scaling=TILE_SCALING, layer_options=layer_options
     )
 
     game_map.scene = arcade.Scene.from_tilemap(my_map)
@@ -66,7 +66,7 @@ def load_map(map_name):
 
             if "type" not in character_object.properties:
                 print(
-                    f"No 'type' field for character in map {map_name}. {character_object.properties}"
+                    f"No 'type' field for character in map {MAP}. {character_object.properties}"
                 )
                 continue
 
@@ -129,49 +129,10 @@ def load_map(map_name):
     for layer, sprite_list in game_map.map_layers.items():
         if "_blocking" in layer and not GOD_MODE:
             try:
-              game_map.scene.remove_sprite_list_by_object(sprite_list)
+                game_map.scene.remove_sprite_list_by_object(sprite_list)
             except:
-              print(f'{layer} has no objects')
+                print(f'{layer} has no objects')
 
             game_map.scene["wall_list"].extend(sprite_list)
 
     return game_map
-
-
-def load_maps():
-    """
-    Load all the Tiled maps from a directory.
-    (Must use the .json extension.)
-    """
-
-    # Directory to pull maps from
-    mypath = "resources/maps"
-
-    if load_maps.map_file_names is None:
-
-        # Dictionary to hold all our maps
-        load_maps.map_list = {}
-
-        # Pull names of all json files in that path
-        load_maps.map_file_names = [
-            f[:-5]
-            for f in os.listdir(mypath)
-            if isfile(join(mypath, f)) and f.endswith(".json")
-        ]
-        load_maps.map_file_names.sort()
-        load_maps.file_count = len(load_maps.map_file_names)
-
-    # Loop and load each file
-    map_name = load_maps.map_file_names.pop(0)
-    load_maps.map_list[map_name] = load_map(f"resources/maps/{map_name}.json")
-
-    files_left = load_maps.file_count - len(load_maps.map_file_names)
-    progress = 100 * files_left / load_maps.file_count
-
-    done = len(load_maps.map_file_names) == 0
-    return done, progress, load_maps.map_list
-
-
-load_maps.map_file_names = None
-load_maps.map_list = None
-load_maps.file_count = None
