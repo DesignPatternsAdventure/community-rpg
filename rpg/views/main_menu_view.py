@@ -3,6 +3,7 @@
 # """
 import arcade
 import arcade.gui
+from loguru import logger
 
 
 class MainMenuView(arcade.View):
@@ -59,23 +60,23 @@ class MainMenuView(arcade.View):
 
     # call back methods for buttons:
     def on_click_resume(self, event):
-        print("show game view")
+        logger.debug("show game view")
         self.window.show_view(self.window.views["game"])
 
     def on_click_settings(self, event):
-        print("show settings view")
+        logger.debug("show settings view")
         self.window.show_view(self.window.views["settings"])
 
     def on_click_new_game(self, event):
-        print("restart game")
+        logger.debug("restart game")
         self.window.views["game"].setup()
         self.window.show_view(self.window.views["game"])
 
     def on_click_quit(self, event):
-        print("quitting")
+        logger.debug("quitting")
         self.window.close()
 
     def on_key_press(self, key, _modifiers):
         if key == arcade.key.ESCAPE:
-            print("show game view")
+            logger.debug("show game view")
             self.window.show_view(self.window.views["game"])

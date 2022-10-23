@@ -8,6 +8,7 @@ import math
 import arcade
 import arcade.gui
 import rpg.constants as constants
+from loguru import logger
 from pyglet.math import Vec2
 from rpg.message_box import MessageBox
 from rpg.sprites.player_sprite import PlayerSprite
@@ -367,9 +368,10 @@ class GameView(arcade.View):
         elif key == arcade.key.KEY_1:
             self.selected_item = 1
             # Will add this to the other keys once there are more items
-            self.player_sprite.equip(0)
+            self.player_sprite.equip(1)
         elif key == arcade.key.KEY_2:
             self.selected_item = 2
+            self.player_sprite.equip(2)
         elif key == arcade.key.KEY_3:
             self.selected_item = 3
         elif key == arcade.key.KEY_4:
@@ -403,14 +405,14 @@ class GameView(arcade.View):
         sprites_in_range = arcade.check_for_collision_with_list(
             self.player_sprite, searchable_sprites
         )
-        print(f"Found {len(sprites_in_range)} searchable sprite(s) in range.")
+        logger.debug(f"Found {len(sprites_in_range)} searchable sprite(s) in range")
         for sprite in sprites_in_range:
 
             if "item" in sprite.properties:
                 self.player_sprite.add_item_to_inventory(self, sprite)
                 sprite.remove_from_sprite_lists()
             else:
-                print(
+                logger.debug(
                     "The 'item' property was not set for the sprite. Can't get any items from this."
                 )
 

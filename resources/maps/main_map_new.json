@@ -93,6 +93,11 @@
                  "name":"Pickaxe",
                  "properties":[
                         {
+                         "name":"equippable",
+                         "type":"bool",
+                         "value":true
+                        }, 
+                        {
                          "name":"item",
                          "type":"string",
                          "value":"Pickaxe"

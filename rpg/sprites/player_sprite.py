@@ -1,7 +1,7 @@
 import arcade
-
-from rpg.sprites.character_sprite import CharacterSprite, Direction
+from loguru import logger
 from rpg.message_box import MessageBox
+from rpg.sprites.character_sprite import CharacterSprite, Direction
 
 
 class PlayerSprite(CharacterSprite):
@@ -14,15 +14,21 @@ class PlayerSprite(CharacterSprite):
         self.item_anim_reversed = False
         self.item_target = None
 
-    def equip(self, index):
-        if len(self.inventory) > index:
-            if self.item and self.item == self.inventory[index]:
-                self.item = None
-            else:
-                self.item = self.inventory[index]
-                self.update_item_position()
+    def equip(self, slot):
+        if len(self.inventory) < slot:
+            logger.info(f'No item in inventory slot {slot}')
+            return
+
+        index = slot - 1
+        item_name = self.inventory[index].properties['item']
+        if 'equippable' not in self.inventory[index].properties:
+            logger.info(f'{item_name} is not equippable!')
+            return
+        if self.item and self.item == self.inventory[index]:
+            self.item = None
         else:
-            print('No item in inventory slot!')
+            self.item = self.inventory[index]
+            self.update_item_position()
 
     def on_update(self, delta_time):
         super().on_update(delta_time)

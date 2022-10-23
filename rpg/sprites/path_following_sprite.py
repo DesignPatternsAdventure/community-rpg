@@ -1,7 +1,7 @@
 import math
 
 import arcade
-
+from loguru import logger
 from rpg.sprites.character_sprite import CharacterSprite
 
 
@@ -21,7 +21,7 @@ class PathFollowingSprite(CharacterSprite):
 
         # Do we have a path?
         if not self.path or len(self.path) == 0:
-            print("No path for path following sprite")
+            logger.debug("No path for path following sprite")
             return
 
         # Grab the current point, and the point we are headed to
