@@ -64,15 +64,24 @@ class PlayerSprite(CharacterSprite):
             self.item.scale = 1
             self.item.angle = 0
 
-    def add_item_to_inventory(self, game_view, item):
-        self.inventory.append(item)
-        game_view.message_box = MessageBox(
-            game_view,
+    def add_item_to_inventory(self, view, item):
+        item_name = item.properties['item']
+        item_in_list = next(
+            (item for item in self.inventory if item.properties['item'] == item_name),
+            None
+        )
+        if item_in_list:
+            item_in_list.properties['count'] += 1
+        else:
+            item.properties['count'] = 1
+            self.inventory.append(item)
+        view.message_box = MessageBox(
+            view,
             f"{item.properties['item']} added to inventory!",
             f"Press {str(len(self.inventory))} to use item. Press any key to close this message."
         )
 
-    def animate_item(self, game_view, config):
+    def animate_item(self, view, config):
         if self.item_anim_frame < config["frames"]:
             angle = config["speed"]
             shift_x = config["shift_x"]
@@ -102,9 +111,9 @@ class PlayerSprite(CharacterSprite):
             if "item" in self.item_target.properties:
                 item_name = self.item_target.properties['item']
                 item = arcade.Sprite(
-                  f":misc:{item_name}.png"
+                    f":misc:{item_name}.png"
                 )
                 item.properties = {'item': item_name}
-                self.add_item_to_inventory(game_view, item)
+                self.add_item_to_inventory(view, item)
             self.item_target = None
         return False

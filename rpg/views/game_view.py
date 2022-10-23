@@ -154,20 +154,24 @@ class GameView(arcade.View):
             hotkey_sprite.draw_scaled(x + sprite_height / 2, y + sprite_height / 2, 2.0)
 
             if item:
-              arcade.draw_text(
-                item.properties['item'],
-                x + 20,
-                y - 20,
-                arcade.color.ALLOY_ORANGE,
-                14
-              )
-              arcade.draw_lrwh_rectangle_textured(
-                x + constants.SPRITE_SIZE,
-                y,
-                constants.SPRITE_SIZE,
-                constants.SPRITE_SIZE,
-                item.texture
-              )
+                text = item.properties['item']
+                count = item.properties['count']
+                if count > 1:
+                    text = f'{text} ({count})'
+                arcade.draw_text(
+                    text,
+                    x + 20,
+                    y - 20,
+                    arcade.color.ALLOY_ORANGE,
+                    12
+                )
+                arcade.draw_lrwh_rectangle_textured(
+                    x + constants.SPRITE_SIZE,
+                    y,
+                    constants.SPRITE_SIZE,
+                    constants.SPRITE_SIZE,
+                    item.texture
+                )
 
     def on_draw(self):
         """
@@ -436,10 +440,10 @@ class GameView(arcade.View):
             closest = arcade.get_closest_sprite(
                 self.player_sprite, self.map.map_layers["interactables_blocking"])
             if closest:
-              (sprite, dist) = closest
-              if dist < constants.SPRITE_SIZE * 2:
-                  self.player_sprite.item_target = sprite
-                  self.animate = True
+                (sprite, dist) = closest
+                if dist < constants.SPRITE_SIZE * 2:
+                    self.player_sprite.item_target = sprite
+                    self.animate = True
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """Called when a user releases a mouse button."""
