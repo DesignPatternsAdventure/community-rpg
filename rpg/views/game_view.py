@@ -3,13 +3,11 @@ Main game view
 """
 
 import json
-from functools import partial
-from typing import Callable
-import datetime
 
 import arcade
 import arcade.gui
 import rpg.constants as constants
+from loguru import logger
 from pyglet.math import Vec2
 from rpg.message_box import MessageBox
 from rpg.sprites.player_sprite import PlayerSprite
@@ -61,6 +59,7 @@ class GameView(arcade.View):
         self.camera_gui = arcade.Camera(self.window.width, self.window.height)
 
         self.noclip_status = False
+        self.animate = False
 
     def setup_physics(self):
         if self.noclip_status:
@@ -138,24 +137,44 @@ class GameView(arcade.View):
         arcade.draw_rectangle_filled(
             x, y, self.window.width, hotbar_height, arcade.color.ALMOND
         )
+
+        # Draw each slot
         for i in range(capacity):
             y = vertical_hotbar_location
             x = i * field_width + 5
             if self.selected_item and i == self.selected_item - 1:
                 arcade.draw_lrtb_rectangle_outline(
-                    x - 6, x + field_width - 15, y + 25, y - 10, arcade.color.BLACK, 2
+                    x - 6, x + field_width - 15, y + 35, y - 25, arcade.color.BLACK, 2
                 )
 
             if len(self.player_sprite.inventory) > i:
-                item_name = self.player_sprite.inventory[i].properties['item']
+                item = self.player_sprite.inventory[i]
             else:
-                item_name = ""
+                item = None
 
             hotkey_sprite = self.hotbar_sprite_list[i]
             hotkey_sprite.draw_scaled(x + sprite_height / 2, y + sprite_height / 2, 2.0)
-            # Add whitespace so the item text doesn't hide behind the number pad sprite
-            text = f"     {item_name}"
-            arcade.draw_text(text, x, y, arcade.color.ALLOY_ORANGE, 16)
+
+            # Draw item in slot
+            if item:
+                text = item.properties['item']
+                count = item.properties['count']
+                if count > 1:
+                    text = f'{text} ({count})'
+                arcade.draw_text(
+                    text,
+                    x + 20,
+                    y - 20,
+                    arcade.color.ALLOY_ORANGE,
+                    12
+                )
+                arcade.draw_lrwh_rectangle_textured(
+                    x + constants.SPRITE_SIZE,
+                    y,
+                    constants.SPRITE_SIZE,
+                    constants.SPRITE_SIZE,
+                    item.texture
+                )
 
     def on_draw(self):
         """
@@ -315,6 +334,9 @@ class GameView(arcade.View):
         # Update player animation
         self.player_sprite_list.on_update(delta_time)
 
+        if self.animate and self.player_sprite.item:
+            self.animate_player_item()
+
         # Update the characters
         try:
             self.map.scene["characters"].on_update(delta_time)
@@ -348,9 +370,10 @@ class GameView(arcade.View):
         elif key == arcade.key.KEY_1:
             self.selected_item = 1
             # Will add this to the other keys once there are more items
-            self.player_sprite.equip(0)
+            self.player_sprite.equip(1)
         elif key == arcade.key.KEY_2:
             self.selected_item = 2
+            self.player_sprite.equip(2)
         elif key == arcade.key.KEY_3:
             self.selected_item = 3
         elif key == arcade.key.KEY_4:
@@ -384,19 +407,14 @@ class GameView(arcade.View):
         sprites_in_range = arcade.check_for_collision_with_list(
             self.player_sprite, searchable_sprites
         )
-        print(f"Found {len(sprites_in_range)} searchable sprite(s) in range.")
+        logger.debug(f"Found {len(sprites_in_range)} searchable sprite(s) in range")
         for sprite in sprites_in_range:
 
             if "item" in sprite.properties:
-                self.player_sprite.inventory.append(sprite)
-                self.message_box = MessageBox(
-                    self,
-                    f"{sprite.properties['item']} added to inventory!",
-                    f"Press {str(len(self.player_sprite.inventory))} to equip item. Press any key to close this message."
-                )
+                self.player_sprite.add_item_to_inventory(self, sprite)
                 sprite.remove_from_sprite_lists()
             else:
-                print(
+                logger.debug(
                     "The 'item' property was not set for the sprite. Can't get any items from this."
                 )
 
@@ -422,6 +440,15 @@ class GameView(arcade.View):
             self.close_message_box()
         if button == arcade.MOUSE_BUTTON_RIGHT:
             self.player_sprite.destination_point = x, y
+        if button == arcade.MOUSE_BUTTON_LEFT and self.player_sprite.item:
+            closest = arcade.get_closest_sprite(
+                self.player_sprite, self.map.map_layers["interactables_blocking"])
+            if not closest:
+                return
+            (sprite, dist) = closest
+            if dist < constants.SPRITE_SIZE * 2:
+                self.player_sprite.item_target = sprite
+                self.animate = True
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """Called when a user releases a mouse button."""
@@ -434,3 +461,7 @@ class GameView(arcade.View):
         """
         self.camera_sprites.resize(width, height)
         self.camera_gui.resize(width, height)
+
+    def animate_player_item(self):
+        config = self.item_dictionary[self.player_sprite.item.properties['item']]['animation']
+        self.animate = self.player_sprite.animate_item(self, config)

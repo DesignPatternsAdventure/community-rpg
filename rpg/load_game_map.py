@@ -2,14 +2,13 @@
 Load maps
 """
 import json
-import os
 from collections import OrderedDict
-from os.path import isfile, join
 
 import arcade
+from loguru import logger
 
-from rpg.sprites.character_sprite import CharacterSprite
 from rpg.constants import MAP, TILE_SCALING
+from rpg.sprites.character_sprite import CharacterSprite
 from rpg.sprites.path_following_sprite import PathFollowingSprite
 from rpg.sprites.random_walking_sprite import RandomWalkingSprite
 
@@ -50,7 +49,7 @@ def load_map():
     }
 
     # Read in the tiled map
-    print(f"Loading map: {MAP}")
+    logger.debug(f"Loading map: {MAP}")
     my_map = arcade.tilemap.load_tilemap(
         MAP, scaling=TILE_SCALING, layer_options=layer_options
     )
@@ -65,14 +64,14 @@ def load_map():
         for character_object in character_object_list:
 
             if "type" not in character_object.properties:
-                print(
+                logger.debug(
                     f"No 'type' field for character in map {MAP}. {character_object.properties}"
                 )
                 continue
 
             character_type = character_object.properties["type"]
             if character_type not in character_dictionary:
-                print(
+                logger.debug(
                     f"Unable to find '{character_type}' in characters_dictionary.json."
                 )
                 continue
@@ -104,12 +103,13 @@ def load_map():
                     path.append(location)
                 character_sprite.path = path
             else:
-                print(
-                    f"Unknown shape type for character with shape '{shape}' in map {map_name}."
+                logger.debug(
+                    f"Unknown shape type for character with shape '{shape}' in map {MAP}."
                 )
                 continue
 
-            print(f"Adding character {character_type} at {character_sprite.position}")
+            logger.debug(
+                f"Adding character {character_type} at {character_sprite.position}")
             game_map.scene.add_sprite("characters", character_sprite)
 
     # Get all the tiled sprite lists
@@ -131,7 +131,7 @@ def load_map():
             try:
                 game_map.scene.remove_sprite_list_by_object(sprite_list)
             except:
-                print(f'{layer} has no objects')
+                logger.debug(f'{layer} has no objects')
 
             game_map.scene["wall_list"].extend(sprite_list)
 

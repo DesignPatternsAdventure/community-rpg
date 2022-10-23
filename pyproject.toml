@@ -44,6 +44,7 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.7"
 arcade = ">=2.6.10"
+loguru = "^0.6.0"
 
 [tool.poetry.group.dev.dependencies]
 black = ">=22.8.0"
