@@ -2,6 +2,7 @@ import arcade
 from loguru import logger
 from rpg.message_box import MessageBox
 from rpg.sprites.character_sprite import CharacterSprite, Direction
+from tasks.task1 import generate_sprite
 
 
 class PlayerSprite(CharacterSprite):
@@ -121,11 +122,8 @@ class PlayerSprite(CharacterSprite):
         if self.item_target:
             self.item_target.remove_from_sprite_lists()
             if "item" in self.item_target.properties:
-                item_name = self.item_target.properties['item']
-                item = arcade.Sprite(
-                    f":misc:{item_name}.png"
-                )
-                item.properties = {'item': item_name}
-                self.add_item_to_inventory(view, item)
+                sprite = generate_sprite(self.item_target.properties['item'])
+                if sprite:
+                    self.add_item_to_inventory(view, sprite)
             self.item_target = None
         return False
