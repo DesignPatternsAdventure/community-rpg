@@ -2,9 +2,7 @@
 Load maps
 """
 import json
-import os
 from collections import OrderedDict
-from os.path import isfile, join
 
 import arcade
 from loguru import logger
@@ -15,7 +13,6 @@ from rpg.sprites.path_following_sprite import PathFollowingSprite
 from rpg.sprites.random_walking_sprite import RandomWalkingSprite
 
 GOD_MODE = False
-
 
 class GameMap:
     name = None

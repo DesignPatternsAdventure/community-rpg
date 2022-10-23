@@ -3,7 +3,6 @@ Main game view
 """
 
 import json
-import math
 
 import arcade
 import arcade.gui
