@@ -2,7 +2,7 @@ import arcade
 from loguru import logger
 from rpg.message_box import MessageBox
 from rpg.sprites.character_sprite import CharacterSprite, Direction
-from tasks.task1 import SpriteGenerator
+from tasks import SpriteGenerator
 
 
 class PlayerSprite(CharacterSprite):
