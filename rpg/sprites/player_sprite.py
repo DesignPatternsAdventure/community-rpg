@@ -1,6 +1,7 @@
 import arcade
 
 from rpg.sprites.character_sprite import CharacterSprite, Direction
+from rpg.message_box import MessageBox
 
 
 class PlayerSprite(CharacterSprite):
@@ -63,7 +64,15 @@ class PlayerSprite(CharacterSprite):
             self.item.scale = 1
             self.item.angle = 0
 
-    def animate_item(self, config):
+    def add_item_to_inventory(self, game_view, item):
+        self.inventory.append(item)
+        game_view.message_box = MessageBox(
+            game_view,
+            f"{item.properties['item']} added to inventory!",
+            f"Press {str(len(self.inventory))} to use item. Press any key to close this message."
+        )
+
+    def animate_item(self, game_view, config):
         if self.item_anim_frame < config["frames"]:
             angle = config["speed"]
             shift_x = config["shift_x"]
@@ -90,5 +99,12 @@ class PlayerSprite(CharacterSprite):
         self.item_anim_frame = 0
         if self.item_target:
             self.item_target.remove_from_sprite_lists()
+            if "item" in self.item_target.properties:
+                item_name = self.item_target.properties['item']
+                item = arcade.Sprite(
+                  f":misc:{item_name}.png"
+                )
+                item.properties = {'item': item_name}
+                self.add_item_to_inventory(game_view, item)
             self.item_target = None
         return False

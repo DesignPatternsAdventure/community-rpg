@@ -154,6 +154,12 @@
                  "height":64,
                  "id":39,
                  "name":"Tree",
+                 "properties":[
+                        {
+                         "name":"item",
+                         "type":"string",
+                         "value":"Wood"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
@@ -166,6 +172,12 @@
                  "height":64,
                  "id":40,
                  "name":"Tree",
+                 "properties":[
+                        {
+                         "name":"item",
+                         "type":"string",
+                         "value":"Wood"
+                        }],
                  "rotation":0,
                  "visible":true,
                  "width":64,

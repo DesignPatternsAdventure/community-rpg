@@ -142,19 +142,32 @@ class GameView(arcade.View):
             x = i * field_width + 5
             if self.selected_item and i == self.selected_item - 1:
                 arcade.draw_lrtb_rectangle_outline(
-                    x - 6, x + field_width - 15, y + 25, y - 10, arcade.color.BLACK, 2
+                    x - 6, x + field_width - 15, y + 35, y - 25, arcade.color.BLACK, 2
                 )
 
             if len(self.player_sprite.inventory) > i:
-                item_name = self.player_sprite.inventory[i].properties['item']
+                item = self.player_sprite.inventory[i]
             else:
-                item_name = ""
+                item = None
 
             hotkey_sprite = self.hotbar_sprite_list[i]
             hotkey_sprite.draw_scaled(x + sprite_height / 2, y + sprite_height / 2, 2.0)
-            # Add whitespace so the item text doesn't hide behind the number pad sprite
-            text = f"     {item_name}"
-            arcade.draw_text(text, x, y, arcade.color.ALLOY_ORANGE, 16)
+
+            if item:
+              arcade.draw_text(
+                item.properties['item'],
+                x + 20,
+                y - 20,
+                arcade.color.ALLOY_ORANGE,
+                14
+              )
+              arcade.draw_lrwh_rectangle_textured(
+                x + constants.SPRITE_SIZE,
+                y,
+                constants.SPRITE_SIZE,
+                constants.SPRITE_SIZE,
+                item.texture
+              )
 
     def on_draw(self):
         """
@@ -390,12 +403,7 @@ class GameView(arcade.View):
         for sprite in sprites_in_range:
 
             if "item" in sprite.properties:
-                self.player_sprite.inventory.append(sprite)
-                self.message_box = MessageBox(
-                    self,
-                    f"{sprite.properties['item']} added to inventory!",
-                    f"Press {str(len(self.player_sprite.inventory))} to equip item. Press any key to close this message."
-                )
+                self.player_sprite.add_item_to_inventory(self, sprite)
                 sprite.remove_from_sprite_lists()
             else:
                 print(
@@ -447,4 +455,4 @@ class GameView(arcade.View):
 
     def animate_player_item(self):
         config = self.item_dictionary[self.player_sprite.item.properties['item']]['animation']
-        self.animate = self.player_sprite.animate_item(config)
+        self.animate = self.player_sprite.animate_item(self, config)
