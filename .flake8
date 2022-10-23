@@ -1,5 +1,5 @@
 [flake8]
 eradicate-aggressive = true
-ignore = B9,E203,W503
+ignore = B9,E203,E501,E722,S311,W503
 min-python-version = 3.10
 select = A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z
