@@ -95,12 +95,14 @@ class PlayerSprite(CharacterSprite):
             shift_y = config["shift_y"]
             if self.direction == Direction.RIGHT or self.direction == Direction.DOWN:
                 angle = -angle
+
             # Normal animation
             if not config["reversable"]:
                 self.item.angle += angle
                 self.item.center_x -= shift_x
                 self.item.center_y -= shift_y
                 return True
+
             # Reversable animation (back-and-forth)
             if self.item_anim_frame % config["reverse_frame"] == 0:
                 self.item_anim_reversed = not self.item_anim_reversed
@@ -113,6 +115,8 @@ class PlayerSprite(CharacterSprite):
                 self.item.center_x -= shift_x
                 self.item.center_y -= shift_y
             return True
+
+        # Finished animation
         self.item_anim_frame = 0
         if self.item_target:
             self.item_target.remove_from_sprite_lists()

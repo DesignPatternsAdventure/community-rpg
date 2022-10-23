@@ -137,6 +137,8 @@ class GameView(arcade.View):
         arcade.draw_rectangle_filled(
             x, y, self.window.width, hotbar_height, arcade.color.ALMOND
         )
+
+        # Draw each slot
         for i in range(capacity):
             y = vertical_hotbar_location
             x = i * field_width + 5
@@ -153,6 +155,7 @@ class GameView(arcade.View):
             hotkey_sprite = self.hotbar_sprite_list[i]
             hotkey_sprite.draw_scaled(x + sprite_height / 2, y + sprite_height / 2, 2.0)
 
+            # Draw item in slot
             if item:
                 text = item.properties['item']
                 count = item.properties['count']
@@ -440,11 +443,12 @@ class GameView(arcade.View):
         if button == arcade.MOUSE_BUTTON_LEFT and self.player_sprite.item:
             closest = arcade.get_closest_sprite(
                 self.player_sprite, self.map.map_layers["interactables_blocking"])
-            if closest:
-                (sprite, dist) = closest
-                if dist < constants.SPRITE_SIZE * 2:
-                    self.player_sprite.item_target = sprite
-                    self.animate = True
+            if not closest:
+                return
+            (sprite, dist) = closest
+            if dist < constants.SPRITE_SIZE * 2:
+                self.player_sprite.item_target = sprite
+                self.animate = True
 
     def on_mouse_release(self, x, y, button, key_modifiers):
         """Called when a user releases a mouse button."""
