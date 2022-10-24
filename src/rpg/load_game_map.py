@@ -57,7 +57,7 @@ def load_map():
     game_map.scene = arcade.Scene.from_tilemap(my_map)
 
     if "characters" in my_map.object_lists:
-        f = open("resources/data/characters_dictionary.json")
+        f = open("src/resources/data/characters_dictionary.json")
         character_dictionary = json.load(f)
         character_object_list = my_map.object_lists["characters"]
 
