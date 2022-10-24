@@ -2,6 +2,7 @@ import arcade
 from loguru import logger
 from rpg.message_box import MessageBox
 from rpg.sprites.character_sprite import CharacterSprite, Direction
+from tasks import SpriteGenerator
 
 
 class PlayerSprite(CharacterSprite):
@@ -13,6 +14,7 @@ class PlayerSprite(CharacterSprite):
         self.item_anim_frame = 0
         self.item_anim_reversed = False
         self.item_target = None
+        self.sprite_generator = SpriteGenerator()
 
     def equip(self, slot):
         if len(self.inventory) < slot:
@@ -121,11 +123,18 @@ class PlayerSprite(CharacterSprite):
         if self.item_target:
             self.item_target.remove_from_sprite_lists()
             if "item" in self.item_target.properties:
-                item_name = self.item_target.properties['item']
-                item = arcade.Sprite(
-                    f":misc:{item_name}.png"
-                )
-                item.properties = {'item': item_name}
-                self.add_item_to_inventory(view, item)
+                item_drop = self.item_target.properties['item']
+                file_path = f":misc:{item_drop}.png"
+                sprite = self.sprite_generator.generate_sprite_with_item_property(
+                    file_path, item_drop)
+                if sprite:
+                    self.add_item_to_inventory(view, sprite)
+                else:
+                    view.message_box = MessageBox(
+                        view,
+                        f"Time for some coding!",
+                        f"Close the game and navigate to this file: src/tasks/task1.py",
+                        True
+                    )
             self.item_target = None
         return False

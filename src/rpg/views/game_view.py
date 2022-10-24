@@ -48,10 +48,10 @@ class GameView(arcade.View):
         self.hotbar_sprite_list = None
         self.selected_item = None
 
-        f = open("resources/data/item_dictionary.json")
+        f = open("src/resources/data/item_dictionary.json")
         self.item_dictionary = json.load(f)
 
-        f = open("resources/data/characters_dictionary.json")
+        f = open("src/resources/data/characters_dictionary.json")
         self.enemy_dictionary = json.load(f)
 
         # Cameras
@@ -110,7 +110,7 @@ class GameView(arcade.View):
         last_number_pad_sprite_index = 61
 
         self.hotbar_sprite_list = arcade.load_spritesheet(
-            file_name="resources/tilesets/input_prompts_kenney.png",
+            file_name="src/resources/tilesets/input_prompts_kenney.png",
             sprite_width=16,
             sprite_height=16,
             columns=34,
@@ -392,7 +392,8 @@ class GameView(arcade.View):
             self.selected_item = 10
 
     def close_message_box(self):
-        self.message_box = None
+        if not self.message_box.locked:
+            self.message_box = None
 
     def search(self):
         """Search for things"""
@@ -407,6 +408,8 @@ class GameView(arcade.View):
         sprites_in_range = arcade.check_for_collision_with_list(
             self.player_sprite, searchable_sprites
         )
+        if not len(sprites_in_range):
+            return
         logger.debug(f"Found {len(sprites_in_range)} searchable sprite(s) in range")
         for sprite in sprites_in_range:
 

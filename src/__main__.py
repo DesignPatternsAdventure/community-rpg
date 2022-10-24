@@ -6,21 +6,23 @@ An open-source RPG
 
 import arcade
 
+import sys
+sys.path.append('src')
+
 from rpg.constants import SCREEN_HEIGHT, SCREEN_TITLE, SCREEN_WIDTH
 from rpg.views import LoadingView
-
 
 class MyWindow(arcade.Window):
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, resizable=True)
         self.views = {}
 
-        arcade.resources.add_resource_handle("characters", "resources/characters")
-        arcade.resources.add_resource_handle("maps", "resources/maps")
-        arcade.resources.add_resource_handle("data", "resources/data")
-        arcade.resources.add_resource_handle("sounds", "resources/sounds")
-        arcade.resources.add_resource_handle("misc", "resources/misc")
-        arcade.resources.add_resource_handle("items", "resources/tilesets")
+        arcade.resources.add_resource_handle("characters", "src/resources/characters")
+        arcade.resources.add_resource_handle("maps", "src/resources/maps")
+        arcade.resources.add_resource_handle("data", "src/resources/data")
+        arcade.resources.add_resource_handle("sounds", "src/resources/sounds")
+        arcade.resources.add_resource_handle("misc", "src/resources/misc")
+        arcade.resources.add_resource_handle("items", "src/resources/tilesets")
 
 
 def main():
