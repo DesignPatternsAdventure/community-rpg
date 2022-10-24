@@ -9,8 +9,7 @@ import arcade.gui
 from loguru import logger
 from pyglet.math import Vec2
 
-import rpg.constants as constants
-
+from .. import constants
 from ..message_box import MessageBox
 from ..sprites.player_sprite import PlayerSprite
 

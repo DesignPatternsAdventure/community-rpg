@@ -4,13 +4,13 @@ from pathlib import Path
 
 import tomli
 
-from rpg import __version__
+from src import __version__
 
 
 def test_version():
     """Check that PyProject and __version__ are equivalent."""
-    data = Path('pyproject.toml').read_text()
+    data = Path("pyproject.toml").read_text()
 
-    result = tomli.loads(data)['tool']['poetry']['version']
+    result = tomli.loads(data)["tool"]["poetry"]["version"]
 
     assert result == __version__

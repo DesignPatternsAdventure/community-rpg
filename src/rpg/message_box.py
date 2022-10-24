@@ -1,6 +1,6 @@
 import arcade
 
-from rpg.constants import MESSAGE_BOX_FONT_SIZE, MESSAGE_BOX_MARGIN
+from .constants import MESSAGE_BOX_FONT_SIZE, MESSAGE_BOX_MARGIN
 
 
 class MessageBox:
