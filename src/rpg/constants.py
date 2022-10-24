@@ -39,6 +39,4 @@ MESSAGE_BOX_MARGIN = 10
 # How fast does the camera pan to the user
 CAMERA_SPEED = 0.1
 
-ITEM_MAP = {
-  'pickaxe': 43
-}
+ITEM_MAP = {"pickaxe": 43}

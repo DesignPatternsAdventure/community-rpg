@@ -3,10 +3,11 @@ Animated sprite for characters that walk around.
 """
 
 
+from enum import Enum
+
 import arcade
 
-from enum import Enum
-from rpg.constants import SPRITE_SIZE
+from ..constants import SPRITE_SIZE
 
 Direction = Enum("Direction", "DOWN LEFT RIGHT UP")
 

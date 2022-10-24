@@ -7,12 +7,13 @@ from collections import OrderedDict
 import arcade
 from loguru import logger
 
-from rpg.constants import MAP, TILE_SCALING
-from rpg.sprites.character_sprite import CharacterSprite
-from rpg.sprites.path_following_sprite import PathFollowingSprite
-from rpg.sprites.random_walking_sprite import RandomWalkingSprite
+from .constants import MAP, TILE_SCALING
+from .sprites.character_sprite import CharacterSprite
+from .sprites.path_following_sprite import PathFollowingSprite
+from .sprites.random_walking_sprite import RandomWalkingSprite
 
 GOD_MODE = False
+
 
 class GameMap:
     name = None
@@ -109,7 +110,8 @@ def load_map():
                 continue
 
             logger.debug(
-                f"Adding character {character_type} at {character_sprite.position}")
+                f"Adding character {character_type} at {character_sprite.position}"
+            )
             game_map.scene.add_sprite("characters", character_sprite)
 
     # Get all the tiled sprite lists
@@ -131,7 +133,7 @@ def load_map():
             try:
                 game_map.scene.remove_sprite_list_by_object(sprite_list)
             except:
-                logger.debug(f'{layer} has no objects')
+                logger.debug(f"{layer} has no objects")
 
             game_map.scene["wall_list"].extend(sprite_list)
 

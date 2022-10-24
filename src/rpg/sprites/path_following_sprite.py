@@ -2,7 +2,8 @@ import math
 
 import arcade
 from loguru import logger
-from rpg.sprites.character_sprite import CharacterSprite
+
+from .character_sprite import CharacterSprite
 
 
 class PathFollowingSprite(CharacterSprite):

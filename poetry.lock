@@ -922,7 +922,7 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "pattern-feedback-tool"
-version = "0.0.3"
+version = "0.0.1"
 description = "Design Pattern Feedback Tool"
 category = "dev"
 optional = false
@@ -976,8 +976,10 @@ unimport = ">=0.11.3"
 vulture = ">=2.4"
 
 [package.source]
-type = "directory"
-url = ".."
+type = "git"
+url = "https://github.com/DesignPatternsAdventure/pattern_feedback_tool.git"
+reference = "doit-tooling"
+resolved_reference = "025a2ba5c356946736730d8a05b61e5cc0db2158"
 
 [[package]]
 name = "pbr"
@@ -1550,7 +1552,7 @@ python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
 
 [[package]]
 name = "zipp"
-version = "3.9.0"
+version = "3.10.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
 category = "dev"
 optional = false
@@ -1563,7 +1565,7 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10.5"
-content-hash = "e43ff98159217fa55cc9fff39e9d21d90137cd89fda6f498a5f252bb8e0b3e88"
+content-hash = "863173622ce7380b1bb576783b729d2c6e62141c06a6120fe39e0542430297e7"
 
 [metadata.files]
 arcade = [
@@ -2504,6 +2506,6 @@ wrapt = [
     {file = "wrapt-1.14.1.tar.gz", hash = "sha256:380a85cf89e0e69b7cfbe2ea9f765f004ff419f34194018a6827ac0e3edfed4d"},
 ]
 zipp = [
-    {file = "zipp-3.9.0-py3-none-any.whl", hash = "sha256:972cfa31bc2fedd3fa838a51e9bc7e64b7fb725a8c00e7431554311f180e9980"},
-    {file = "zipp-3.9.0.tar.gz", hash = "sha256:3a7af91c3db40ec72dd9d154ae18e008c69efe8ca88dde4f9a731bb82fe2f9eb"},
+    {file = "zipp-3.10.0-py3-none-any.whl", hash = "sha256:4fcb6f278987a6605757302a6e40e896257570d11c51628968ccb2a47e80c6c1"},
+    {file = "zipp-3.10.0.tar.gz", hash = "sha256:7a7262fd930bd3e36c50b9a64897aec3fafff3dfdeec9623ae22b40e93f99bb8"},
 ]

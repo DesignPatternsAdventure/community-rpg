@@ -6,11 +6,9 @@ An open-source RPG
 
 import arcade
 
-import sys
-sys.path.append('src')
+from .rpg.constants import SCREEN_HEIGHT, SCREEN_TITLE, SCREEN_WIDTH
+from .rpg.views import LoadingView
 
-from rpg.constants import SCREEN_HEIGHT, SCREEN_TITLE, SCREEN_WIDTH
-from rpg.views import LoadingView
 
 class MyWindow(arcade.Window):
     def __init__(self):
