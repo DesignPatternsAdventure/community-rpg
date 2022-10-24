@@ -206,3 +206,6 @@ coverage.json
 
 # Tiled Session for Tiled Projects
 *.tiled-session
+
+# Ignore pattern feedback tool temporary files
+.pft_*

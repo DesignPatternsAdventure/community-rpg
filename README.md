@@ -38,11 +38,19 @@ The game is in extremely early stages. For discussion on future direction, see:
 
 ## Installation
 
+### Graphviz
+
+Make sure to [install graphviz from the official website](https://www.graphviz.org/download/)
+
+For Mac users, this might be `brew install graphviz`, while Windows may need to download the latest `.exe` installer from the site or [use chocolatey](https://community.chocolatey.org/packages/graphviz)
+
+### Python and Poetry
+
 If you already have a compatible version of Python and poetry installed, you can get started right away and skip to "Game Play" below.
 
 The recommended installation is with `asdf` on Linux, Mac, and Windows (through WSL). For Windows native, see the recommended solutions further below
 
-### Mac, Linux, and Windows Subsystem for Linux (WSL)
+#### Mac, Linux, and Windows Subsystem for Linux (WSL)
 
 `asdf` is a general purpose version manager and we use it to ensure consistency between setups. To install `asdf`, follow the [installation guide](https://asdf-vm.com/guide/getting-started.html)
 
@@ -60,7 +68,7 @@ asdf install
 poetry install
 ```
 
-### Windows Native
+#### Windows Native
 
 1. There are multiple ways to install Python on Windows if you don't have it already. Our recommend approach is to install Chocolatey and run `choco install python` ([link](https://community.chocolatey.org/packages/python)). See the [guide for installing and configuring chocolatey here](https://chocolatey.org/install).
 1. Next, install `poetry` following the [official poetry installation guide](https://python-poetry.org/docs/#installing-with-the-official-installer). We recommend using `pipx` ([pipx guide](https://pypa.github.io/pipx/installation/)), but installing method with powershell is the fastest way to get started.
