@@ -132,8 +132,9 @@ class PlayerSprite(CharacterSprite):
                 else:
                     view.message_box = MessageBox(
                         view,
-                        f"Time for do some coding!",
-                        f"Close the game and navigate to this file: tasks/task1.py"
+                        f"Time for some coding!",
+                        f"Close the game and navigate to this file: src/tasks/task1.py",
+                        True
                     )
             self.item_target = None
         return False

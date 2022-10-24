@@ -392,7 +392,8 @@ class GameView(arcade.View):
             self.selected_item = 10
 
     def close_message_box(self):
-        self.message_box = None
+        if not self.message_box.locked:
+            self.message_box = None
 
     def search(self):
         """Search for things"""
@@ -407,6 +408,8 @@ class GameView(arcade.View):
         sprites_in_range = arcade.check_for_collision_with_list(
             self.player_sprite, searchable_sprites
         )
+        if not len(sprites_in_range):
+            return
         logger.debug(f"Found {len(sprites_in_range)} searchable sprite(s) in range")
         for sprite in sprites_in_range:
 
