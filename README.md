@@ -38,7 +38,7 @@ The game is in extremely early stages. For discussion on future direction, see:
 
 ## Installation
 
-If you already have a compatible version of Python and poetry installed, you can get started right away.
+If you already have a compatible version of Python and poetry installed, you can get started right away and skip to "Game Play" below.
 
 The recommended installation is with `asdf` on Linux, Mac, and Windows (through WSL). For Windows native, see the recommended solutions further below
 
@@ -75,34 +75,35 @@ Let's launch the game UI and make the first code changes!
 ```sh
 > poetry shell
 (shell) doit play
-
-# # FYI: this is the proposed way to interact, you can't currently use doit, so run for now:
-# poetry run python -m rpg
 ````
 
-This will open the game window where you can walk around using the keys `W`, `A`, `S`, and `D`
+This will open the game window where you can walk around using the keys `W`, `A`, `S`, and `D` and interact with items by pressing `E`.
 
-To make the first code change, try editing the file in **TBD/TBD/TBD.py** and changing the **TBD** to **TBD**
+To quit the game, click the red "x" icon to close or use the keyboard shortcut `Ctrl C`.
 
 Note: you may have seen it above, but we will use the convention of `>` to indicate a normal shell prompt and `(shell)` to indicate when the command must be run after running `poetry shell` at least once. Alternatively, you could use `poetry run doit play`, but using `poetry shell` first is more convenient
 
-```sh
-doit play
-```
+... (TODO Merge with documentation on 1st task, which starts in-game)
 
 Great, you've made your first code change!
 
-Now the first task code is very limited and needs your help to refactor and extend it, but first lets take a look at the baseline functionality:
+~~Now the first task code is very limited and needs your help to refactor and extend it, but first lets take a look at the baseline functionality:~~
 
 ```sh
 # Run all of the default tasks
 (shell) doit --continue
+(shell) doit list
 # Tasks can also be run one-by-one
-(shell) doit inspect
-# Or you can use a watcher utility that will re-run on changes
+(shell) doit run format
+(shell) doit run test
+(shell) doit run check
+(shell) doit run build_diagrams
+# Or you can use a watcher utility that will re-run tests on changes
 (shell) doit watch_changes
+
+# When ready to start the next task, call:
+# (FYI: This hasn't been implemented yet!)
+(shell) doit next_task
 ```
 
-**TBD** ... (These docs are WIP and a proposed way to interact, but heve not yet been implemented!)
-
-(TODO: how to switch tasks? Maybe `doit start task2`? Maybe this would pull the necessary sample code and README? Then the full test suite would be run against all pulled tasks?)
+**TBD** ...

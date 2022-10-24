@@ -979,7 +979,7 @@ vulture = ">=2.4"
 type = "git"
 url = "https://github.com/DesignPatternsAdventure/pattern_feedback_tool.git"
 reference = "doit-tooling"
-resolved_reference = "025a2ba5c356946736730d8a05b61e5cc0db2158"
+resolved_reference = "941fbf5c8b1a0ac502343f2450a8b466c5ec176b"
 
 [[package]]
 name = "pbr"
