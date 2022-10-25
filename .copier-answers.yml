@@ -1,0 +1,22 @@
+# yamllint disable-file
+# Answer file maintained by Copier for: https://github.com/KyleKing/calcipy_template
+# Check into version control. Edit by re-running copier and changing responses to the questions
+_commit: 0.15.7
+_src_path: gh:KyleKing/calcipy_template
+author_email: dev.act.kyle@gmail.com
+author_name: Team Island
+author_username: kyleking
+cname: ''
+copyright_date: '2022'
+development_branch: dpa-development
+doc_dir: docs
+include_adrs: false
+include_all: false
+install_extras: null
+minimum_python: 3.10.5
+package_name_py: rpg
+project_description: Community RPG Fork
+project_name: community-rpg
+repository_namespace: DesignPatternsAdventure
+repository_provider: https://github.com
+

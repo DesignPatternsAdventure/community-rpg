@@ -6,11 +6,12 @@ import json
 
 import arcade
 import arcade.gui
-import rpg.constants as constants
 from loguru import logger
 from pyglet.math import Vec2
-from rpg.message_box import MessageBox
-from rpg.sprites.player_sprite import PlayerSprite
+
+from .. import constants
+from ..message_box import MessageBox
+from ..sprites.player_sprite import PlayerSprite
 
 
 class GameView(arcade.View):
@@ -157,23 +158,17 @@ class GameView(arcade.View):
 
             # Draw item in slot
             if item:
-                text = item.properties['item']
-                count = item.properties['count']
+                text = item.properties["item"]
+                count = item.properties["count"]
                 if count > 1:
-                    text = f'{text} ({count})'
-                arcade.draw_text(
-                    text,
-                    x + 20,
-                    y - 20,
-                    arcade.color.ALLOY_ORANGE,
-                    12
-                )
+                    text = f"{text} ({count})"
+                arcade.draw_text(text, x + 20, y - 20, arcade.color.ALLOY_ORANGE, 12)
                 arcade.draw_lrwh_rectangle_textured(
                     x + constants.SPRITE_SIZE,
                     y,
                     constants.SPRITE_SIZE,
                     constants.SPRITE_SIZE,
-                    item.texture
+                    item.texture,
                 )
 
     def on_draw(self):
@@ -399,9 +394,7 @@ class GameView(arcade.View):
         """Search for things"""
         map_layers = self.map.map_layers
         if "searchable" not in map_layers:
-            self.message_box = MessageBox(
-                self, "No searchable items nearby"
-            )
+            self.message_box = MessageBox(self, "No searchable items nearby")
             return
 
         searchable_sprites = map_layers["searchable"]
@@ -445,7 +438,8 @@ class GameView(arcade.View):
             self.player_sprite.destination_point = x, y
         if button == arcade.MOUSE_BUTTON_LEFT and self.player_sprite.item:
             closest = arcade.get_closest_sprite(
-                self.player_sprite, self.map.map_layers["interactables_blocking"])
+                self.player_sprite, self.map.map_layers["interactables_blocking"]
+            )
             if not closest:
                 return
             (sprite, dist) = closest
@@ -466,5 +460,7 @@ class GameView(arcade.View):
         self.camera_gui.resize(width, height)
 
     def animate_player_item(self):
-        config = self.item_dictionary[self.player_sprite.item.properties['item']]['animation']
+        config = self.item_dictionary[self.player_sprite.item.properties["item"]][
+            "animation"
+        ]
         self.animate = self.player_sprite.animate_item(self, config)

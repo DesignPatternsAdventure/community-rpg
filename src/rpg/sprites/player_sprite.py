@@ -1,8 +1,9 @@
 import arcade
 from loguru import logger
-from rpg.message_box import MessageBox
-from rpg.sprites.character_sprite import CharacterSprite, Direction
-from tasks import SpriteGenerator
+
+from ...tasks import SpriteGenerator
+from ..message_box import MessageBox
+from .character_sprite import CharacterSprite, Direction
 
 
 class PlayerSprite(CharacterSprite):
@@ -18,13 +19,13 @@ class PlayerSprite(CharacterSprite):
 
     def equip(self, slot):
         if len(self.inventory) < slot:
-            logger.info(f'No item in inventory slot {slot}')
+            logger.info(f"No item in inventory slot {slot}")
             return
 
         index = slot - 1
-        item_name = self.inventory[index].properties['item']
-        if 'equippable' not in self.inventory[index].properties:
-            logger.info(f'{item_name} is not equippable!')
+        item_name = self.inventory[index].properties["item"]
+        if "equippable" not in self.inventory[index].properties:
+            logger.info(f"{item_name} is not equippable!")
             return
         if self.item and self.item == self.inventory[index]:
             self.item = None
@@ -73,20 +74,20 @@ class PlayerSprite(CharacterSprite):
             self.item.angle = 0
 
     def add_item_to_inventory(self, view, item):
-        item_name = item.properties['item']
+        item_name = item.properties["item"]
         item_in_list = next(
-            (item for item in self.inventory if item.properties['item'] == item_name),
-            None
+            (item for item in self.inventory if item.properties["item"] == item_name),
+            None,
         )
         if item_in_list:
-            item_in_list.properties['count'] += 1
+            item_in_list.properties["count"] += 1
         else:
-            item.properties['count'] = 1
+            item.properties["count"] = 1
             self.inventory.append(item)
         view.message_box = MessageBox(
             view,
             f"{item.properties['item']} added to inventory!",
-            f"Press {str(len(self.inventory))} to use item. Press any key to close this message."
+            f"Press {str(len(self.inventory))} to use item. Press any key to close this message.",
         )
 
     def animate_item(self, view, config):
@@ -123,10 +124,11 @@ class PlayerSprite(CharacterSprite):
         if self.item_target:
             self.item_target.remove_from_sprite_lists()
             if "item" in self.item_target.properties:
-                item_drop = self.item_target.properties['item']
+                item_drop = self.item_target.properties["item"]
                 file_path = f":misc:{item_drop}.png"
                 sprite = self.sprite_generator.generate_sprite_with_item_property(
-                    file_path, item_drop)
+                    file_path, item_drop
+                )
                 if sprite:
                     self.add_item_to_inventory(view, sprite)
                 else:
@@ -134,7 +136,7 @@ class PlayerSprite(CharacterSprite):
                         view,
                         f"Time for some coding!",
                         f"Close the game and navigate to this file: src/tasks/task1.py",
-                        True
+                        True,
                     )
             self.item_target = None
         return False

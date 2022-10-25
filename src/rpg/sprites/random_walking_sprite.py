@@ -3,7 +3,7 @@ import random
 
 import arcade
 
-from rpg.sprites.character_sprite import CharacterSprite
+from .character_sprite import CharacterSprite
 
 
 class RandomWalkingSprite(CharacterSprite):
