@@ -29,4 +29,4 @@ arcade = ">=2.6.10"
 loguru = ">=0.6.0"
 
 [tool.poetry.group.dev.dependencies]
-pattern-feedback-tool = { git = "https://github.com/DesignPatternsAdventure/pattern_feedback_tool.git", branch = "doit-tooling" }
+pattern-feedback-tool = { git = "https://github.com/DesignPatternsAdventure/pattern_feedback_tool.git" }
