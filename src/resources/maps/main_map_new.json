@@ -182,6 +182,11 @@
                          "name":"item",
                          "type":"string",
                          "value":"Wood"
+                        }, 
+                        {
+                         "name":"task",
+                         "type":"int",
+                         "value":1
                         }],
                  "rotation":0,
                  "visible":true,

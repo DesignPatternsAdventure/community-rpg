@@ -55,12 +55,9 @@ class SpriteGenerator:
           sprite.properties = { key: value }
         """
         # TODO: implement this method
+
+        # When you finish implementing, run `doit list` in the shell to get feedback
+        # on your changes (or `poetry run doit list` if you are not using the shell).
+
+        # Finally, run `doit play` to continue playing the game!
         pass
-
-
-# Working solution (will remove later):
-#
-# def generate_sprite_with_item_property(self, file_path: str, item: str):
-#     sprite = arcade.Sprite(file_path)
-#     sprite.properties = {'item': item}
-#     return sprite

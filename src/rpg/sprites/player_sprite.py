@@ -123,7 +123,14 @@ class PlayerSprite(CharacterSprite):
         self.item_anim_frame = 0
         if self.item_target:
             self.item_target.remove_from_sprite_lists()
-            if "item" in self.item_target.properties:
+            if "task" in self.item_target.properties:
+                view.message_box = MessageBox(
+                    view,
+                    f"Task 1 complete",
+                    f"Great, you've made your first code change!",
+                    True,  # When task 2 is implemented, this lock will be removed
+                )
+            elif "item" in self.item_target.properties:
                 item_drop = self.item_target.properties["item"]
                 file_path = f":misc:{item_drop}.png"
                 sprite = self.sprite_generator.generate_sprite_with_item_property(
