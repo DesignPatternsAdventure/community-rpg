@@ -990,7 +990,7 @@ vulture = ">=2.4"
 type = "git"
 url = "https://github.com/DesignPatternsAdventure/pattern_feedback_tool.git"
 reference = "HEAD"
-resolved_reference = "353a1e6ab93596b347f7ce7926b9834225c37e15"
+resolved_reference = "e9f49241f751536b23cd7e9697435bb061acd3fc"
 
 [[package]]
 name = "pbr"
