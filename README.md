@@ -30,7 +30,7 @@ asdf plugin-add poetry https://github.com/asdf-community/asdf-poetry.git
 
 # Make sure you are within the project directory and then run:
 cd community-rpg
-asdf install
+asdf install # This one usually takes a while
 
 # Then install the project to check that setup worked
 poetry install
