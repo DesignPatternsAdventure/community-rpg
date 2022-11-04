@@ -12,6 +12,7 @@ from pyglet.math import Vec2
 from .. import constants
 from ..message_box import MessageBox
 from ..sprites.player_sprite import PlayerSprite
+from ..game_state import GameState
 
 
 class GameView(arcade.View):
@@ -28,7 +29,7 @@ class GameView(arcade.View):
         self.ui_manager.enable()
 
         # Player sprite
-        self.player_sprite = None
+        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
         self.player_sprite_list = None
 
         # Track the current state of what key is pressed
@@ -61,6 +62,7 @@ class GameView(arcade.View):
 
         self.noclip_status = False
         self.animate = False
+        self.game_state = GameState(self.player_sprite)
 
     def setup_physics(self):
         if self.noclip_status:
@@ -75,7 +77,16 @@ class GameView(arcade.View):
             )
 
     def setup(self):
-        """Set up the game variables. Call to re-start the game."""
+        """Get saved game data"""
+
+        data = self.game_state.get_data()
+        if data:
+          self.start_game(data)
+          return
+        self.start_game()
+
+    def start_game(self, data=None):
+        """Call to re-start the game"""
 
         if self.map.background_color:
             arcade.set_background_color(self.map.background_color)
@@ -83,11 +94,10 @@ class GameView(arcade.View):
         map_height = self.map.map_size[1]
 
         # Spawn the player
-        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
-        self.player_sprite.center_x = (
+        self.player_sprite.center_x = data['x'] if data else (
             constants.STARTING_X * constants.SPRITE_SIZE + constants.SPRITE_SIZE / 2
         )
-        self.player_sprite.center_y = (
+        self.player_sprite.center_y = data['y'] if data else (
             map_height - constants.STARTING_Y
         ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
         self.scroll_to_player(1.0)
@@ -341,7 +351,6 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
-
         if self.message_box:
             self.message_box.on_key_press(key, modifiers)
             return
@@ -425,6 +434,7 @@ class GameView(arcade.View):
             self.left_pressed = False
         elif key in constants.KEY_RIGHT:
             self.right_pressed = False
+        self.game_state.save_data()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         """Called whenever the mouse moves."""
