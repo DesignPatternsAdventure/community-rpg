@@ -7,7 +7,7 @@ from collections import OrderedDict
 import arcade
 from loguru import logger
 
-from .constants import MAP, TILE_SCALING
+from .constants import TILE_SCALING
 from .sprites.character_sprite import CharacterSprite
 from .sprites.path_following_sprite import PathFollowingSprite
 from .sprites.random_walking_sprite import RandomWalkingSprite
@@ -24,7 +24,7 @@ class GameMap:
     background_color = arcade.color.AMAZON
 
 
-def load_map():
+def load_map(map=None):
     """
     Load a map
     """
@@ -50,9 +50,9 @@ def load_map():
     }
 
     # Read in the tiled map
-    logger.debug(f"Loading map: {MAP}")
+    logger.debug(f"Loading map: {map}")
     my_map = arcade.tilemap.load_tilemap(
-        MAP, scaling=TILE_SCALING, layer_options=layer_options
+        map, scaling=TILE_SCALING, layer_options=layer_options
     )
 
     game_map.scene = arcade.Scene.from_tilemap(my_map)
@@ -66,7 +66,7 @@ def load_map():
 
             if "type" not in character_object.properties:
                 logger.debug(
-                    f"No 'type' field for character in map {MAP}. {character_object.properties}"
+                    f"No 'type' field for character in map {map}. {character_object.properties}"
                 )
                 continue
 
@@ -105,7 +105,7 @@ def load_map():
                 character_sprite.path = path
             else:
                 logger.debug(
-                    f"Unknown shape type for character with shape '{shape}' in map {MAP}."
+                    f"Unknown shape type for character with shape '{shape}' in map {map}."
                 )
                 continue
 
