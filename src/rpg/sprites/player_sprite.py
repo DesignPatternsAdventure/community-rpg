@@ -7,8 +7,8 @@ from .character_sprite import CharacterSprite, Direction
 
 
 class PlayerSprite(CharacterSprite):
-    def __init__(self, sheet_name):
-        super().__init__(sheet_name)
+    def __init__(self, sheet_name, inventory=[]):
+        super().__init__(sheet_name, inventory)
         self.sound_update = 0
         self.footstep_sound = arcade.load_sound(":sounds:footstep00.wav")
         self.item = None

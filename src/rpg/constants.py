@@ -40,3 +40,7 @@ MESSAGE_BOX_MARGIN = 10
 CAMERA_SPEED = 0.1
 
 ITEM_MAP = {"pickaxe": 43}
+
+SAVE_FILE_DIR = 'src/resources/__cache__'
+PLAYER_SAVE_FILE = f'{SAVE_FILE_DIR}/player_save_file'
+MAP_SAVE_FILE = f'{SAVE_FILE_DIR}/map_save_file.json'

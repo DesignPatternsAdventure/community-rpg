@@ -12,6 +12,8 @@ from pyglet.math import Vec2
 from .. import constants
 from ..message_box import MessageBox
 from ..sprites.player_sprite import PlayerSprite
+from ..game_state import GameState
+from ..load_game_map import load_map
 
 
 class GameView(arcade.View):
@@ -19,7 +21,7 @@ class GameView(arcade.View):
     Main application class.
     """
 
-    def __init__(self, map):
+    def __init__(self):
         super().__init__()
 
         arcade.set_background_color(arcade.color.AMAZON)
@@ -41,7 +43,8 @@ class GameView(arcade.View):
         self.physics_engine = None
 
         # Maps
-        self.map = map
+        self.game_state = GameState()
+        self.map = load_map(self.game_state.map_path)
 
         self.message_box = None
 
@@ -56,7 +59,8 @@ class GameView(arcade.View):
         self.enemy_dictionary = json.load(f)
 
         # Cameras
-        self.camera_sprites = arcade.Camera(self.window.width, self.window.height)
+        self.camera_sprites = arcade.Camera(
+            self.window.width, self.window.height)
         self.camera_gui = arcade.Camera(self.window.width, self.window.height)
 
         self.noclip_status = False
@@ -75,7 +79,16 @@ class GameView(arcade.View):
             )
 
     def setup(self):
-        """Set up the game variables. Call to re-start the game."""
+        """Get saved game data"""
+
+        data = self.game_state.get_player_data()
+        if data:
+            self.start_game(data)
+            return
+        self.start_game()
+
+    def start_game(self, data=None):
+        """Call to re-start the game"""
 
         if self.map.background_color:
             arcade.set_background_color(self.map.background_color)
@@ -83,16 +96,18 @@ class GameView(arcade.View):
         map_height = self.map.map_size[1]
 
         # Spawn the player
-        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png")
-        self.player_sprite.center_x = (
+        self.player_sprite = PlayerSprite(":characters:Female/Female 22-1.png",
+                                          self.game_state.decompress_inventory(data)) if data else PlayerSprite(":characters:Female/Female 22-1.png")
+        self.player_sprite.center_x = data['x'] if data else (
             constants.STARTING_X * constants.SPRITE_SIZE + constants.SPRITE_SIZE / 2
         )
-        self.player_sprite.center_y = (
+        self.player_sprite.center_y = data['y'] if data else (
             map_height - constants.STARTING_Y
         ) * constants.SPRITE_SIZE - constants.SPRITE_SIZE / 2
         self.scroll_to_player(1.0)
         self.player_sprite_list = arcade.SpriteList()
         self.player_sprite_list.append(self.player_sprite)
+        self.game_state.player = self.player_sprite
 
         # Set up the hotbar
         self.load_hotbar_sprites()
@@ -154,7 +169,8 @@ class GameView(arcade.View):
                 item = None
 
             hotkey_sprite = self.hotbar_sprite_list[i]
-            hotkey_sprite.draw_scaled(x + sprite_height / 2, y + sprite_height / 2, 2.0)
+            hotkey_sprite.draw_scaled(
+                x + sprite_height / 2, y + sprite_height / 2, 2.0)
 
             # Draw item in slot
             if item:
@@ -162,7 +178,8 @@ class GameView(arcade.View):
                 count = item.properties["count"]
                 if count > 1:
                     text = f"{text} ({count})"
-                arcade.draw_text(text, x + 20, y - 20, arcade.color.ALLOY_ORANGE, 12)
+                arcade.draw_text(text, x + 20, y - 20,
+                                 arcade.color.ALLOY_ORANGE, 12)
                 arcade.draw_lrwh_rectangle_textured(
                     x + constants.SPRITE_SIZE,
                     y,
@@ -341,7 +358,6 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
-
         if self.message_box:
             self.message_box.on_key_press(key, modifiers)
             return
@@ -403,12 +419,14 @@ class GameView(arcade.View):
         )
         if not len(sprites_in_range):
             return
-        logger.debug(f"Found {len(sprites_in_range)} searchable sprite(s) in range")
+        logger.debug(
+            f"Found {len(sprites_in_range)} searchable sprite(s) in range")
         for sprite in sprites_in_range:
 
             if "item" in sprite.properties:
                 self.player_sprite.add_item_to_inventory(self, sprite)
                 sprite.remove_from_sprite_lists()
+                self.game_state.remove_sprite_from_map(sprite)
             else:
                 logger.debug(
                     "The 'item' property was not set for the sprite. Can't get any items from this."
@@ -425,6 +443,7 @@ class GameView(arcade.View):
             self.left_pressed = False
         elif key in constants.KEY_RIGHT:
             self.right_pressed = False
+        self.game_state.save_player_data()
 
     def on_mouse_motion(self, x, y, delta_x, delta_y):
         """Called whenever the mouse moves."""

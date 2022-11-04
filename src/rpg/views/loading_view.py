@@ -4,7 +4,6 @@ Loading screen
 import arcade
 
 from ..draw_bar import draw_bar
-from ..load_game_map import load_map
 from .game_view import GameView
 from .inventory_view import InventoryView
 from .main_menu_view import MainMenuView
@@ -15,7 +14,6 @@ class LoadingView(arcade.View):
     def __init__(self):
         super().__init__()
         self.started = False
-        self.game_map = None
         arcade.set_background_color(arcade.color.ALMOND)
 
     def on_draw(self):
@@ -38,8 +36,7 @@ class LoadingView(arcade.View):
 
     def on_update(self, delta_time: float):
         if self.started:
-            self.game_map = load_map()
-            self.window.views["game"] = GameView(self.game_map)
+            self.window.views["game"] = GameView()
             self.window.views["game"].setup()
             self.window.views["inventory"] = InventoryView()
             self.window.views["inventory"].setup()

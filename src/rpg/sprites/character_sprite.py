@@ -20,7 +20,7 @@ SPRITE_INFO = {
 
 
 class CharacterSprite(arcade.Sprite):
-    def __init__(self, sheet_name):
+    def __init__(self, sheet_name, inventory=[]):
         super().__init__()
         self.textures = arcade.load_spritesheet(
             sheet_name,
@@ -32,7 +32,7 @@ class CharacterSprite(arcade.Sprite):
         self.should_update = 0
         self.cur_texture_index = 0
         self.texture = self.textures[self.cur_texture_index]
-        self.inventory = []
+        self.inventory = inventory
         self.direction = Direction.LEFT
 
     def on_update(self, delta_time):

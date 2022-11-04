@@ -69,7 +69,7 @@ class MainMenuView(arcade.View):
 
     def on_click_new_game(self, event):
         logger.debug("restart game")
-        self.window.views["game"].setup()
+        self.window.views["game"].start_game()
         self.window.show_view(self.window.views["game"])
 
     def on_click_quit(self, event):
